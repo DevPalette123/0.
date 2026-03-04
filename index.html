@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نجم الأسبوع ⭐</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ══════════════════════════════════════════
+   ⚙️  عدّل هذا السطر بعد نشر الـ Apps Script
+   ══════════════════════════════════════════ */
+/* const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec"; */
+
+:root {
+  --ink:    #0b0c14;
+  --surface:#13141f;
+  --card:   #191a2b;
+  --edge:   rgba(255,210,60,0.2);
+  --gold:   #FFD23C;
+  --goldd:  #c9a030;
+  --sky:    #3d8ef8;
+  --green:  #0fd9a0;
+  --red:    #ff4d6d;
+  --txt:    #eceaff;
+  --muted:  #7a75a0;
+  --r:      18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--ink);color:var(--txt);font-family:'Tajawal',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ── BG ── */
+.bg-layer{position:fixed;inset:0;pointer-events:none;z-index:0}
+.bg-layer canvas{width:100%;height:100%}
+.glow{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0;animation:orb 14s infinite alternate ease-in-out}
+.g1{width:600px;height:600px;background:rgba(61,142,248,.09);top:-200px;left:-150px}
+.g2{width:400px;height:400px;background:rgba(255,210,60,.06);bottom:-80px;right:-100px;animation-delay:-7s}
+@keyframes orb{from{transform:translate(0,0)}to{transform:translate(40px,30px)}}
+
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:36px 18px 80px}
+
+/* ── HEADER ── */
+header{text-align:center;margin-bottom:44px;animation:fadeD .7s ease both}
+@keyframes fadeD{from{opacity:0;transform:translateY(-24px)}to{opacity:1;transform:none}}
+.logo-star{font-size:3.8rem;display:inline-block;animation:spin 6s linear infinite}
+@keyframes spin{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.15)}100%{transform:rotate(360deg) scale(1)}}
+header h1{font-size:clamp(2rem,7vw,3.4rem);font-weight:900;letter-spacing:-1px;
+  background:linear-gradient(130deg,#FFD23C 0%,#fff 55%,#FFD23C 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1;margin-top:4px}
+header p{color:var(--muted);font-size:.95rem;margin-top:8px}
+
+/* ── STATUS ── */
+.status-bar{border-radius:var(--r);padding:18px 24px;margin-bottom:20px;
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  animation:fadeU .6s .1s ease both;border:1.5px solid}
+@keyframes fadeU{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.status-bar.open{background:rgba(15,217,160,.07);border-color:rgba(15,217,160,.3)}
+.status-bar.closed{background:rgba(255,77,109,.07);border-color:rgba(255,77,109,.25)}
+.dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.open .dot{background:var(--green);box-shadow:0 0 10px var(--green);animation:blink 1.4s infinite}
+.closed .dot{background:var(--red);box-shadow:0 0 10px var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.st-text{flex:1}
+.st-text strong{display:block;font-size:1.05rem;font-weight:700}
+.open .st-text strong{color:var(--green)}
+.closed .st-text strong{color:var(--red)}
+.st-text span{font-size:.82rem;color:var(--muted)}
+.day-pills{display:flex;gap:6px;flex-wrap:wrap}
+.dp{padding:4px 11px;border-radius:30px;font-size:.75rem;font-weight:700;border:1.5px solid}
+.dp.on{border-color:var(--gold);color:var(--gold);background:rgba(255,210,60,.1)}
+.dp.off{border-color:rgba(122,117,160,.2);color:var(--muted);background:transparent}
+.dp.now{animation:glow 1.4s infinite alternate}
+@keyframes glow{from{box-shadow:0 0 5px rgba(255,210,60,.3)}to{box-shadow:0 0 16px rgba(255,210,60,.7)}}
+
+/* ── COUNTDOWN ── */
+.countdown{background:var(--card);border:1.5px solid var(--edge);border-radius:var(--r);
+  padding:16px 24px;text-align:center;margin-bottom:22px;animation:fadeU .6s .18s ease both}
+.cd-label{color:var(--muted);font-size:.8rem;margin-bottom:4px}
+.cd-val{font-size:1.8rem;font-weight:800;color:var(--gold);letter-spacing:3px;font-variant-numeric:tabular-nums}
+
+/* ── WINNER SPOTLIGHT ── */
+.winner-section{margin-bottom:32px;animation:fadeU .7s .22s ease both}
+.winner-card{background:linear-gradient(135deg,rgba(255,210,60,.1),rgba(255,210,60,.02));
+  border:2px solid rgba(255,210,60,.5);border-radius:22px;padding:28px;position:relative;overflow:hidden}
+.winner-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.winner-ribbon{display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,rgba(255,210,60,.25),rgba(255,210,60,.05));
+  border:1px solid rgba(255,210,60,.4);border-radius:20px;padding:5px 14px;
+  font-size:.78rem;font-weight:700;color:var(--gold);margin-bottom:16px}
+.w-header{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.w-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;font-weight:800;background:linear-gradient(135deg,var(--gold),var(--sky));color:var(--ink);flex-shrink:0}
+.w-name{font-weight:800;font-size:1.1rem}
+.w-handle{color:var(--muted);font-size:.83rem}
+.w-content{color:rgba(236,234,255,.85);font-size:.95rem;line-height:1.75;margin-bottom:14px}
+.w-media{border-radius:12px;overflow:hidden;max-height:320px;margin-bottom:14px;background:#000}
+.w-media img{width:100%;max-height:320px;object-fit:contain}
+.w-media iframe{width:100%;height:280px;border:none}
+.w-link{display:inline-flex;align-items:center;gap:6px;color:var(--sky);font-size:.83rem;
+  padding:6px 14px;background:rgba(61,142,248,.1);border-radius:8px;text-decoration:none;transition:background .2s}
+.w-link:hover{background:rgba(61,142,248,.2)}
+.no-winner{text-align:center;padding:28px;color:var(--muted);font-size:.92rem}
+
+/* ── FORM ── */
+.form-card{background:var(--card);border:1.5px solid var(--edge);border-radius:22px;
+  padding:30px;margin-bottom:40px;position:relative;overflow:hidden;animation:fadeU .6s .25s ease both}
+.form-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.form-card h2{font-size:1.25rem;font-weight:800;margin-bottom:22px;display:flex;align-items:center;gap:8px}
+
+/* Type selector */
+.type-tabs{display:flex;gap:8px;margin-bottom:22px;background:rgba(255,255,255,.04);
+  border-radius:12px;padding:5px}
+.tab-btn{flex:1;padding:10px;border-radius:9px;border:none;background:transparent;
+  color:var(--muted);font-family:'Tajawal',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:6px}
+.tab-btn.active{background:rgba(255,210,60,.15);color:var(--gold);border:1.5px solid rgba(255,210,60,.4)}
+.tab-btn:hover:not(.active){background:rgba(255,255,255,.06);color:var(--txt)}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-size:.85rem;color:var(--muted);font-weight:600;margin-bottom:7px}
+.field input,.field textarea{width:100%;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,210,60,.12);
+  border-radius:11px;padding:13px 15px;color:var(--txt);font-family:'Tajawal',sans-serif;font-size:.93rem;
+  outline:none;resize:vertical;direction:rtl;transition:border .25s,box-shadow .25s}
+.field input:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,210,60,.1)}
+.field input::placeholder,.field textarea::placeholder{color:rgba(122,117,160,.45)}
+
+/* Upload zone */
+.upload-zone{border:2px dashed rgba(255,210,60,.25);border-radius:12px;padding:32px;text-align:center;
+  cursor:pointer;transition:all .25s;position:relative;background:rgba(255,210,60,.03)}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--gold);background:rgba(255,210,60,.06)}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-icon{font-size:2.4rem;display:block;margin-bottom:8px}
+.upload-zone p{color:var(--muted);font-size:.88rem}
+.upload-zone strong{color:var(--gold)}
+.preview-box{border-radius:12px;overflow:hidden;margin-top:12px;background:#000;display:none}
+.preview-box img,.preview-box video{width:100%;max-height:260px;object-fit:contain}
+.file-info{margin-top:10px;font-size:.8rem;color:var(--green);display:none}
+
+.submit-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--gold),var(--goldd));
+  border:none;border-radius:12px;color:var(--ink);font-family:'Tajawal',sans-serif;
+  font-size:1rem;font-weight:800;cursor:pointer;transition:transform .2s,box-shadow .2s,opacity .2s;
+  margin-top:6px;display:flex;align-items:center;justify-content:center;gap:10px}
+.submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,210,60,.28)}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed}
+.progress-bar{width:100%;height:6px;background:rgba(255,255,255,.08);border-radius:3px;margin-top:14px;display:none;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--sky));border-radius:3px;
+  width:0%;transition:width .3s;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%{filter:brightness(1)}50%{filter:brightness(1.3)}100%{filter:brightness(1)}}
+
+/* closed overlay */
+.closed-veil{position:absolute;inset:0;background:rgba(11,12,20,.8);backdrop-filter:blur(8px);
+  border-radius:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10}
+.closed-veil .veil-icon{font-size:3.2rem;animation:sway 3s infinite ease-in-out}
+@keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+.closed-veil p{font-size:1.05rem;font-weight:700;color:var(--red)}
+.closed-veil small{color:var(--muted);font-size:.83rem}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:28px;right:26px;background:var(--card);
+  border:1.5px solid rgba(15,217,160,.4);border-radius:14px;padding:14px 20px;
+  display:flex;align-items:center;gap:10px;font-weight:600;font-size:.9rem;color:var(--green);
+  z-index:999;transform:translateY(120px);opacity:0;transition:all .4s cubic-bezier(.34,1.56,.64,1)}
+.toast.show{transform:none;opacity:1}
+.toast.error{border-color:rgba(255,77,109,.4);color:var(--red)}
+
+/* ── SPINNER ── */
+.spinner{width:20px;height:20px;border:2.5px solid rgba(11,12,20,.4);
+  border-top-color:var(--ink);border-radius:50%;animation:spin2 .7s linear infinite;display:none}
+@keyframes spin2{to{transform:rotate(360deg)}}
+
+/* ── LIGHTBOX ── */
+.lightbox{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:200;display:none;
+  align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.show{display:flex}
+.lightbox img{max-width:92vw;max-height:90vh;border-radius:10px;box-shadow:0 20px 80px rgba(0,0,0,.8)}
+.lb-close{position:absolute;top:20px;right:20px;font-size:2rem;color:white;cursor:pointer;line-height:1}
+
+/* ── SECTION DIVIDER ── */
+.section-divider{display:flex;align-items:center;gap:12px;margin:32px 0 24px}
+.section-divider hr{flex:1;border:none;border-top:1px solid rgba(255,210,60,.1)}
+.section-divider span{color:var(--gold);font-size:.8rem;font-weight:700;white-space:nowrap}
+
+@media(max-width:540px){
+  .type-tabs{flex-direction:column;gap:5px}
+  .form-card{padding:20px 15px}
+  .post-card{padding:16px}
+  .day-pills{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="glow g1"></div>
+<div class="glow g2"></div>
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lb-close">✕</span>
+  <img id="lbImg" src="" alt="">
+</div>
+
+<div class="wrap">
+
+<!-- HEADER -->
+<header>
+  <span class="logo-star">⭐</span>
+  <h1>نجم الأسبوع</h1>
+  <p>تحصل على التكريم الأسبوعي أفضل تعليق ومشاركة رمضانية </p>
+</header>
+
+<!-- STATUS BAR -->
+<div class="status-bar" id="statusBar">
+  <div class="dot"></div>
+  <div class="st-text">
+    <strong id="stTitle">…</strong>
+    <span id="stSub"></span>
+  </div>
+  <div class="day-pills" id="dayPills"></div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="countdown">
+  <div class="cd-label" id="cdLabel">⏳</div>
+  <div class="cd-val" id="cdVal">--:--:--</div>
+</div>
+
+<!-- WINNER SPOTLIGHT -->
+<div class="winner-section" id="winnerSection">
+  <div class="section-divider"><hr><span>🏆 فائز الأسبوع</span><hr></div>
+  <div id="winnerContainer"><div class="no-winner">جاري تحميل الفائز…</div></div>
+</div>
+
+<!-- SUBMISSION FORM -->
+<div class="section-divider"><hr><span>📬 أرسل مشاركتك</span><hr></div>
+<div class="form-card" id="formCard">
+  <h2>شارك الآن</h2>
+
+  <!-- Type tabs -->
+  <div class="type-tabs">
+    <button class="tab-btn active" onclick="setType('comment')" id="tab-comment">💬 تعليق</button>
+    <button class="tab-btn"        onclick="setType('image')"   id="tab-image">🖼️ صورة</button>
+    <button class="tab-btn"        onclick="setType('video')"   id="tab-video">🎬 فيديو</button>
+  </div>
+
+  <!-- Common fields -->
+  <div class="field">
+    <label>الاسم *</label>
+    <input type="text" id="fName" placeholder="اسمك الكريم" maxlength="60">
+  </div>
+  <!-- Comment specific -->
+  <div id="commentFields">
+    <div class="field">
+      <label>نص التعليق / المشاركة *</label>
+      <textarea id="fContent" rows="4" placeholder="الصق تعليقك أو مشاركتك هنا…"></textarea>
+    </div>
+
+  </div>
+
+  <!-- Media specific -->
+  <div id="mediaFields" style="display:none">
+    <div class="field">
+      <label>وصف مختصر (اختياري)</label>
+      <input type="text" id="fCaption" placeholder="وصف الصورة/الفيديو">
+    </div>
+    <div class="field">
+      <label id="uploadLabel">اختر الصورة *</label>
+      <div class="upload-zone" id="uploadZone"
+           ondragover="event.preventDefault();this.classList.add('drag')"
+           ondragleave="this.classList.remove('drag')"
+           ondrop="handleDrop(event)">
+        <input type="file" id="fFile" onchange="handleFile(this)" accept="image/*">
+        <span class="upload-icon">📁</span>
+        <p>اسحب الملف هنا أو <strong>اضغط للاختيار</strong></p>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:4px">حجم أقصى: 25 ميجابايت</p>
+      </div>
+      <div class="preview-box" id="previewBox">
+        <img id="previewImg" src="" alt="معاينة">
+        <video id="previewVid" controls style="display:none"></video>
+      </div>
+      <div class="file-info" id="fileInfo">✅ تم اختيار الملف</div>
+    </div>
+  </div>
+
+  <button class="submit-btn" id="submitBtn" onclick="submitForm()">
+    <div class="spinner" id="btnSpinner"></div>
+    <span id="btnLabel">🚀 أرسل المشاركة</span>
+  </button>
+  <div class="progress-bar" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <!-- Closed overlay -->
+  <div class="closed-veil" id="closedVeil" style="display:none">
+    <div class="veil-icon">🔒</div>
+    <p>التصويت مغلق الآن</p>
+    <small>يُفتح من الخميس إلى الأحد</small>
+  </div>
+</div>
+
+<!-- no public posts list -->
+
+</div><!-- /wrap -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  ⚙️  ضع رابط Apps Script الخاص بك هنا بعد النشر
+// ══════════════════════════════════════════════════════════
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHAaw2Y_IDopaIfsx3dfFQ7er2B7OXdeiARMPF1KhHLcJWCC65DB7d6uqdRBin_GVg/exec";
+// ══════════════════════════════════════════════════════════
+
+// أيام الفتح: الخميس(4) جمعة(5) سبت(6) أحد(0)  + اليوم الحالي للتجربة
+const TODAY    = new Date().getDay();
+const OPEN_DAYS_BASE = [4, 5, 6, 0];
+const OPEN_DAYS = [...new Set([...OPEN_DAYS_BASE, TODAY])]; // يضيف اليوم الحالي دائماً للتجربة
+
+const DAYS = {0:'الأحد',1:'الاثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
+let currentType = 'comment';
+let selectedFile = null;
+
+// ── STATUS ──
+function isOpen(){ return OPEN_DAYS.includes(new Date().getDay()); }
+
+function initStatus(){
+  const open = isOpen();
+  const bar  = document.getElementById('statusBar');
+  const title = document.getElementById('stTitle');
+  const sub   = document.getElementById('stSub');
+  const pills = document.getElementById('dayPills');
+  const veil  = document.getElementById('closedVeil');
+  const day   = new Date().getDay();
+
+  bar.className = 'status-bar ' + (open ? 'open' : 'closed');
+  if(open){
+    title.textContent = '🟢 المشاركة مفتوحة الآن';
+    sub.textContent   = 'شاركنا مشاركتك!';
+    veil.style.display = 'none';
+  } else {
+    const nxt = nextOpenDay();
+    title.textContent = '🔴 المشاركة مغلقة';
+    sub.textContent   = `تُفتح يوم ${nxt.name}`;
+    veil.style.display = 'flex';
+  }
+
+  pills.innerHTML = '';
+  [4,5,6,0,1,2,3].forEach(d => {
+    const el = document.createElement('div');
+    el.className = `dp ${OPEN_DAYS.includes(d)?'on':'off'} ${d===day?'now':''}`;
+    el.textContent = DAYS[d];
+    pills.appendChild(el);
+  });
+}
+
+function nextOpenDay(){
+  const now = new Date().getDay();
+  for(let i=1;i<=7;i++){
+    const d = (now+i)%7;
+    if(OPEN_DAYS.includes(d)) return {name:DAYS[d], daysLeft:i};
+  }
+}
+function nextCloseDay(){
+  const now = new Date().getDay();
+  for(let i=1;i<=7;i++){
+    const d = (now+i)%7;
+    if(!OPEN_DAYS.includes(d)) return {name:DAYS[d], daysLeft:i};
+  }
+}
+
+// ── COUNTDOWN ──
+function updateCd(){
+  const open  = isOpen();
+  const label = document.getElementById('cdLabel');
+  const val   = document.getElementById('cdVal');
+  const now   = new Date();
+  const info  = open ? nextCloseDay() : nextOpenDay();
+  label.textContent = open ? '⏳ يُغلق بعد' : '⏳ يُفتح بعد';
+  const target = new Date(now);
+  target.setDate(target.getDate() + (info?.daysLeft||1));
+  target.setHours(0,0,0,0);
+  const diff = target - now;
+  const h = Math.floor(diff/3600000);
+  const m = Math.floor((diff%3600000)/60000);
+  const s = Math.floor((diff%60000)/1000);
+  val.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+// ── TYPE TABS ──
+function setType(t){
+  currentType = t;
+  selectedFile = null;
+  document.getElementById('previewBox').style.display = 'none';
+  document.getElementById('fileInfo').style.display   = 'none';
+  document.getElementById('fFile').value = '';
+
+  ['comment','image','video'].forEach(x => {
+    document.getElementById('tab-'+x).classList.toggle('active', x===t);
+  });
+  document.getElementById('commentFields').style.display = t==='comment' ? 'block' : 'none';
+  document.getElementById('mediaFields').style.display   = t!=='comment' ? 'block' : 'none';
+
+  if(t==='image'){
+    document.getElementById('uploadLabel').textContent = 'اختر الصورة *';
+    document.getElementById('fFile').accept = 'image/*';
+  } else if(t==='video'){
+    document.getElementById('uploadLabel').textContent = 'اختر الفيديو *';
+    document.getElementById('fFile').accept = 'video/*';
+  }
+}
+
+// ── FILE HANDLING ──
+function handleFile(input){
+  if(!input.files.length) return;
+  processFile(input.files[0]);
+}
+function handleDrop(e){
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  if(e.dataTransfer.files.length) processFile(e.dataTransfer.files[0]);
+}
+function processFile(file){
+  if(file.size > 25*1024*1024){ showToast('⚠️ الملف أكبر من 25 ميجابايت', true); return; }
+  selectedFile = file;
+  const preview = document.getElementById('previewBox');
+  const img     = document.getElementById('previewImg');
+  const vid     = document.getElementById('previewVid');
+  const info    = document.getElementById('fileInfo');
+  const url = URL.createObjectURL(file);
+  if(file.type.startsWith('image/')){
+    img.src = url; img.style.display='block'; vid.style.display='none';
+  } else {
+    vid.src = url; vid.style.display='block'; img.style.display='none';
+  }
+  preview.style.display='block';
+  info.textContent = `✅ ${file.name} (${(file.size/1024/1024).toFixed(2)} MB)`;
+  info.style.display='block';
+}
+
+// ── FILE TO BASE64 ──
+function toBase64(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = ()=>res(r.result.split(',')[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+
+// ── SUBMIT ──
+async function submitForm(){
+  if(!isOpen()){ showToast('المشاركة مغلقة الآن', true); return; }
+  const name = document.getElementById('fName').value.trim();
+  if(!name){ showToast('⚠️ يرجى إدخال الاسم', true); return; }
+
+  const btn     = document.getElementById('submitBtn');
+  const spinner = document.getElementById('btnSpinner');
+  const lbl     = document.getElementById('btnLabel');
+  const pb      = document.getElementById('progressBar');
+  const pf      = document.getElementById('progressFill');
+  btn.disabled  = true;
+  spinner.style.display='inline-block';
+  lbl.textContent = 'جاري الإرسال…';
+  pb.style.display='block'; pf.style.width='10%';
+
+  let payload;
+  if(currentType === 'comment'){
+    const content = document.getElementById('fContent').value.trim();
+    if(!content){ resetBtn(); showToast('⚠️ يرجى كتابة التعليق', true); return; }
+    payload = { type:'comment', name, content };
+    pf.style.width='50%';
+  } else {
+    if(!selectedFile){ resetBtn(); showToast('⚠️ يرجى اختيار الملف', true); return; }
+    const caption = document.getElementById('fCaption').value.trim();
+    pf.style.width='30%';
+    const fileBase64 = await toBase64(selectedFile);
+    pf.style.width='70%';
+    payload = {
+      type: currentType,
+      name, caption,
+      fileBase64,
+      mimeType: selectedFile.type,
+      fileName: selectedFile.name
+    };
+  }
+
+  pf.style.width='85%';
+  try {
+    // Apps Script يتطلب إرسال البيانات كـ string في الـ body
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // مهم جداً مع Apps Script
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(payload)
+    });
+    // no-cors لا يُعيد response قابلة للقراءة، لذا نعتبر الإرسال ناجحاً
+    pf.style.width='100%';
+    showToast('✅ تم إرسال مشاركتك بنجاح!');
+    clearForm();
+  } catch(err){
+    showToast('❌ تعذّر الاتصال. تأكد من رابط الـ Script', true);
+  }
+  setTimeout(()=>{ pb.style.display='none'; pf.style.width='0%'; }, 800);
+  resetBtn();
+}
+
+function resetBtn(){
+  const btn = document.getElementById('submitBtn');
+  document.getElementById('btnSpinner').style.display='none';
+  document.getElementById('btnLabel').textContent = '🚀 أرسل المشاركة';
+  btn.disabled = false;
+}
+function clearForm(){
+  document.getElementById('fName').value='';
+  document.getElementById('fContent').value='';
+  document.getElementById('fCaption').value='';
+  document.getElementById('fFile').value='';
+  document.getElementById('previewBox').style.display='none';
+  document.getElementById('fileInfo').style.display='none';
+  selectedFile=null;
+}
+
+async function loadWinner(){
+  try {
+    const res  = await fetch(SCRIPT_URL + '?action=getWinner');
+    const data = await res.json();
+    renderWinner(data.winner);
+  } catch {
+    document.getElementById('winnerContainer').innerHTML =
+      '<div class="no-winner">لم يُحدَّد فائز بعد هذا الأسبوع</div>';
+  }
+}
+
+// ── RENDER WINNER ──
+function renderWinner(w){
+  const el = document.getElementById('winnerContainer');
+  if(!w){ el.innerHTML='<div class="no-winner">🌟 لم يُحدَّد فائز بعد هذا الأسبوع</div>'; return; }
+  const avatarColor = pickColor(w.name);
+  const initial = w.name.charAt(0);
+  let mediaHtml = '';
+  if(w.type==='صورة' && w.link){
+    const id = extractDriveId(w.link);
+    if(id) mediaHtml=`<div class="w-media"><img src="https://drive.google.com/uc?id=${id}&export=view" loading="lazy" onclick="openLightbox(this.src)" alt="صورة الفائز"></div>`;
+  } else if(w.type==='فيديو' && w.link){
+    const id = extractDriveId(w.link);
+    if(id) mediaHtml=`<div class="w-media"><iframe src="https://drive.google.com/file/d/${id}/preview" allowfullscreen></iframe></div>`;
+  }
+  const linkHtml = (w.type==='تعليق' && w.link)
+    ? `<a href="${esc(w.link)}" target="_blank" class="w-link">🔗 رابط المشاركة الأصلية ↗</a>`
+    : (w.link && w.type!=='صورة' && w.type!=='فيديو' ? `<a href="${esc(w.link)}" target="_blank" class="w-link">🔗 فتح الملف ↗</a>` : '');
+
+  el.innerHTML=`
+    <div class="winner-card">
+      <div class="winner-ribbon">⭐ فائز الأسبوع</div>
+      <div class="w-header">
+        <div class="w-avatar" style="background:linear-gradient(135deg,${avatarColor},var(--gold))">${initial}</div>
+        <div>
+          <div class="w-name">${esc(w.name)}</div>
+          <div class="w-handle">${esc(w.handle||'')}</div>
+        </div>
+      </div>
+      ${w.content?`<div class="w-content">"${esc(w.content)}"</div>`:''}
+      ${mediaHtml}
+      ${linkHtml}
+    </div>`;
+}
+
+// ── HELPERS ──
+function extractDriveId(url){
+  const m = url.match(/[-\w]{25,}/);
+  return m ? m[0] : null;
+}
+function pickColor(name){
+  const cols = ['#6c63ff','#f5a623','#e91e8c','#00bcd4','#4caf50','#ff5722','#9c27b0'];
+  let h = 0;
+  for(let i=0;i<name.length;i++) h = name.charCodeAt(i) + ((h<<5)-h);
+  return cols[Math.abs(h) % cols.length];
+}
+function esc(t){
+  return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(d){
+  if(!d) return '';
+  try { return new Date(d).toLocaleDateString('ar-SA',{weekday:'short',day:'numeric',month:'short'}); }
+  catch { return d; }
+}
+
+// ── LIGHTBOX ──
+function openLightbox(src){ document.getElementById('lbImg').src=src; document.getElementById('lightbox').classList.add('show'); }
+function closeLightbox(){ document.getElementById('lightbox').classList.remove('show'); }
+
+// ── TOAST ──
+function showToast(msg, err=false){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (err?' error':'') + ' show';
+  setTimeout(()=>t.className='toast'+(err?' error':''), 3500);
+}
+
+// ── INIT ──
+initStatus();
+updateCd();
+setInterval(updateCd, 1000);
+loadWinner();
+</script>
+</body>
+</html>
