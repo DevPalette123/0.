@@ -290,7 +290,7 @@ header p{color:var(--muted);font-size:.95rem;margin-top:8px}
   <div class="closed-veil" id="closedVeil" style="display:none">
     <div class="veil-icon">🔒</div>
     <p>التصويت مغلق الآن</p>
-    <small>يُفتح من الخميس إلى الأحد</small>
+    <small>المشاركة مفتوحة طوال الأسبوع ما عدا يوم الاثنين</small>
   </div>
 </div>
 
@@ -308,9 +308,8 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHAaw2Y_IDopaIfsx3d
 // ══════════════════════════════════════════════════════════
 
 // أيام الفتح: الخميس(4) جمعة(5) سبت(6) أحد(0)  + اليوم الحالي للتجربة
-const TODAY    = new Date().getDay();
-const OPEN_DAYS_BASE = [4, 5, 6, 0];
-const OPEN_DAYS = [...new Set([...OPEN_DAYS_BASE, TODAY])]; // يضيف اليوم الحالي دائماً للتجربة
+// الأيام المفتوحة (كل الأيام ما عدا الاثنين)
+const OPEN_DAYS = [0,2,3,4,5,6];
 
 const DAYS = {0:'الأحد',1:'الاثنين',2:'الثلاثاء',3:'الأربعاء',4:'الخميس',5:'الجمعة',6:'السبت'};
 let currentType = 'comment';
