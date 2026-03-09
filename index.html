@@ -304,7 +304,7 @@ header p{color:var(--muted);font-size:.95rem;margin-top:8px}
 // ══════════════════════════════════════════════════════════
 //  ⚙️  ضع رابط Apps Script الخاص بك هنا بعد النشر
 // ══════════════════════════════════════════════════════════
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHAaw2Y_IDopaIfsx3dfFQ7er2B7OXdeiARMPF1KhHLcJWCC65DB7d6uqdRBin_GVg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQTpKT-dG8ZMkVeOLSQBKZVAQN_Ha9X2AmGLqLeN8fzB-MNC-N4SUyB314pqMaSgo2fg/exec";
 // ══════════════════════════════════════════════════════════
 
 // أيام الفتح: الخميس(4) جمعة(5) سبت(6) أحد(0)  + اليوم الحالي للتجربة
@@ -519,47 +519,76 @@ async function loadWinner(){
   try {
     const res  = await fetch(SCRIPT_URL + '?action=getWinner');
     const data = await res.json();
-    renderWinner(data.winner);
+    renderWinners(data.winners || [data.winner]);
   } catch {
     document.getElementById('winnerContainer').innerHTML =
       '<div class="no-winner">لم يُحدَّد فائز بعد هذا الأسبوع</div>';
   }
 }
 
-// ── RENDER WINNER ──
-function renderWinner(w){
-  const el = document.getElementById('winnerContainer');
-  if(!w){ el.innerHTML='<div class="no-winner">🌟 لم يُحدَّد فائز بعد هذا الأسبوع</div>'; return; }
-  const avatarColor = pickColor(w.name);
-  const initial = w.name.charAt(0);
-  let mediaHtml = '';
-  if(w.type==='صورة' && w.link){
-    const id = extractDriveId(w.link);
-    if(id) mediaHtml=`<div class="w-media"><img src="https://drive.google.com/uc?id=${id}&export=view" loading="lazy" onclick="openLightbox(this.src)" alt="صورة الفائز"></div>`;
-  } else if(w.type==='فيديو' && w.link){
-    const id = extractDriveId(w.link);
-    if(id) mediaHtml=`<div class="w-media"><iframe src="https://drive.google.com/file/d/${id}/preview" allowfullscreen></iframe></div>`;
-  }
-  const linkHtml = (w.type==='تعليق' && w.link)
-    ? `<a href="${esc(w.link)}" target="_blank" class="w-link">🔗 رابط المشاركة الأصلية ↗</a>`
-    : (w.link && w.type!=='صورة' && w.type!=='فيديو' ? `<a href="${esc(w.link)}" target="_blank" class="w-link">🔗 فتح الملف ↗</a>` : '');
+function renderWinners(list){
 
-  el.innerHTML=`
-    <div class="winner-card">
+  const el = document.getElementById('winnerContainer');
+
+  if(!list || !list.length){
+    el.innerHTML = '<div class="no-winner">🌟 لم يُحدَّد فائز بعد هذا الأسبوع</div>';
+    return;
+  }
+
+  let html = '';
+
+  list.forEach(w => {
+
+    const avatarColor = pickColor(w.name);
+    const initial = w.name.charAt(0);
+
+    let mediaHtml = '';
+
+    if(w.type === 'صورة' && w.link){
+      const id = extractDriveId(w.link);
+      if(id){
+        mediaHtml = `
+        <div class="w-media">
+        <img src="https://drive.google.com/uc?id=${id}&export=view"
+        loading="lazy"
+        onclick="openLightbox(this.src)">
+        </div>`;
+      }
+    }
+
+    else if(w.type === 'فيديو' && w.link){
+      const id = extractDriveId(w.link);
+      if(id){
+        mediaHtml = `
+        <div class="w-media">
+        <iframe src="https://drive.google.com/file/d/${id}/preview"
+        allowfullscreen></iframe>
+        </div>`;
+      }
+    }
+
+    html += `
+    <div class="winner-card" style="margin-bottom:20px">
       <div class="winner-ribbon">⭐ فائز الأسبوع</div>
+
       <div class="w-header">
-        <div class="w-avatar" style="background:linear-gradient(135deg,${avatarColor},var(--gold))">${initial}</div>
+        <div class="w-avatar" style="background:linear-gradient(135deg,${avatarColor},var(--gold))">
+        ${initial}
+        </div>
+
         <div>
           <div class="w-name">${esc(w.name)}</div>
-          <div class="w-handle">${esc(w.handle||'')}</div>
         </div>
       </div>
-      ${w.content?`<div class="w-content">"${esc(w.content)}"</div>`:''}
-      ${mediaHtml}
-      ${linkHtml}
-    </div>`;
-}
 
+      ${w.content ? `<div class="w-content">"${esc(w.content)}"</div>` : ''}
+      ${mediaHtml}
+
+    </div>`;
+  });
+
+  el.innerHTML = html;
+}
 // ── HELPERS ──
 function extractDriveId(url){
   const m = url.match(/[-\w]{25,}/);
