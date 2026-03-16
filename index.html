@@ -554,12 +554,17 @@ function clearForm(){
 }
 
 async function loadWinner(){
+  const winnerContainer = document.getElementById('winnerContainer');
+
+  // مؤقتًا أثناء تحميل البيانات
+  winnerContainer.innerHTML = '<div class="no-winner">جاري تحميل الفائز…</div>';
+
   try {
     const res  = await fetch(SCRIPT_URL + '?action=getWinner');
     const data = await res.json();
     renderWinners(data.winners || [data.winner]);
   } catch {
-    document.getElementById('winnerContainer').innerHTML =
+    winnerContainer.innerHTML =
       '<div class="no-winner">لم يُحدَّد فائز بعد هذا الأسبوع</div>';
   }
 }
