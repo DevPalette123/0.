@@ -626,6 +626,28 @@ initStatus();
 updateCd();
 setInterval(updateCd, 1000);
 loadWinner();
+   window.addEventListener("load", function () {
+
+  var btn = document.getElementById("subBtn");
+
+  // فتح الإرسال
+  btn.disabled = false;
+  btn.innerHTML = "🚀 إرسال المشاركة";
+
+  // بعد 3 دقائق يتم الإغلاق
+  setTimeout(function () {
+
+    btn.disabled = true;
+    btn.innerHTML = "❌ تم إغلاق الإرسال";
+
+    showToast(
+      "انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية",
+      "er"
+    );
+
+  }, 180000); // 3 دقائق
+
+});
 </script>
 </body>
 </html>
