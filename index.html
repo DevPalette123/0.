@@ -620,7 +620,9 @@ function showToast(msg, err=false){
   t.className = 'toast' + (err?' error':'') + ' show';
   setTimeout(()=>t.className='toast'+(err?' error':''), 3500);
 }
+
 // ── INIT ──
+let overrideOpen = true; // فتح تجريبي اليوم لمدة 3 دقائق
 initStatus();
 updateCd();
 setInterval(updateCd, 1000);
@@ -628,28 +630,38 @@ loadWinner();
 
 var btn = document.getElementById("submitBtn");
 
-// فتح الزر مؤقتًا لمدة 3 دقائق اليوم
+// إعادة تعريف الدالة isOpen مؤقتًا
+function isOpen() {
+  if(overrideOpen) return true; // اليوم مفتوح مؤقتًا
+  return OPEN_DAYS.includes(new Date().getDay());
+}
+
+// تحديث واجهة الزر مباشرة
 btn.disabled = false;
-btn.innerHTML = "🚀 أرسل المشاركة";
+document.getElementById('btnLabel').textContent = "🚀 أرسل المشاركة";
 
-// مؤقت لمدة 3 دقائق
-setTimeout(function () {
-  // بعد 3 دقائق، أغلق الزر
-  btn.disabled = true;
-  btn.innerHTML = "❌ انتهت مدة المشاركة التجريبية";
+// بعد 3 دقائق
+setTimeout(function() {
+  overrideOpen = false; // العودة للعمل الطبيعي حسب OPEN_DAYS
+  initStatus();          // تحديث الواجهة حسب الأيام الأصلية
 
-  // منع الضغط نهائيًا
-  btn.onclick = function () {
-    showToast(
-      "انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية",
-      true
-    );
-    return false;
-  };
-
-  // بعد الإغلاق التجريبي، استدعاء initStatus لتطبيق أيام الفتح الحقيقية
-  setTimeout(initStatus, 100); // تأخير بسيط لتحديث الحالة
-}, 3 * 60 * 1000);
+  // تحديث الزر حسب حالة اليوم الحقيقي
+  if(isOpen()) {
+    btn.disabled = false;
+    document.getElementById('btnLabel').textContent = "🚀 أرسل المشاركة";
+    btn.onclick = submitForm;
+  } else {
+    btn.disabled = true;
+    document.getElementById('btnLabel').textContent = "❌ انتهت مدة المشاركة";
+    btn.onclick = function() {
+      showToast(
+        "انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية",
+        true
+      );
+      return false;
+    };
+  }
+}, 3 * 60 * 1000); // 3 دقائق
 </script>
 </body>
 </html>
