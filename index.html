@@ -316,8 +316,9 @@ let currentType = 'comment';
 let selectedFile = null;
 
 // ── STATUS ──
-// كل الأيام مغلقة
-const OPEN_DAYS = []; // لا يوجد أي يوم مفتوح
+function isOpen(){ 
+  return false; // كل الأيام مغلقة
+}
 
 function initStatus(){
   const bar  = document.getElementById('statusBar');
@@ -325,30 +326,41 @@ function initStatus(){
   const sub   = document.getElementById('stSub');
   const pills = document.getElementById('dayPills');
   const veil  = document.getElementById('closedVeil');
+  const day   = new Date().getDay();
 
   bar.className = 'status-bar closed';
   title.textContent = '🔴 المشاركة مغلقة';
   sub.textContent   = 'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
   veil.style.display = 'flex';
 
-  // الأيام كلها مغلقة
   pills.innerHTML = '';
   [0,1,2,3,4,5,6].forEach(d => {
     const el = document.createElement('div');
-    el.className = `dp off ${d===new Date().getDay()?'now':''}`;
+    el.className = `dp off ${d===day?'now':''}`;
     el.textContent = DAYS[d];
     pills.appendChild(el);
   });
-
-  // تعطيل زر الإرسال نهائياً
-  const btn = document.getElementById("submitBtn");
-  btn.disabled = true;
-  btn.innerHTML = "❌ انتهت المشاركة";
-  btn.onclick = function () {
-    showToast("انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية", true);
-    return false;
-  };
 }
+
+// ── COUNTDOWN ──
+function updateCd(){
+  const val = document.getElementById('cdVal');
+  val.textContent = 'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
+}
+
+// ── INIT ──
+initStatus();
+updateCd();
+setInterval(updateCd, 1000);
+
+// قفل زر الإرسال نهائياً
+const btn = document.getElementById("submitBtn");
+btn.disabled = true;
+btn.innerHTML = "❌ تم إغلاق الإرسال";
+btn.onclick = function(){
+  showToast("انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية", true);
+  return false;
+};
 
 // ── COUNTDOWN ──
 function updateCd(){
