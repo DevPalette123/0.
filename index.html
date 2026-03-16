@@ -626,15 +626,17 @@ updateCd();
 setInterval(updateCd, 1000);
 loadWinner();
 
-// فتح الإرسال مؤقتًا لأي يوم للتجربة
 var btn = document.getElementById("submitBtn");
-btn.disabled = false; 
+
+// فتح الزر مؤقتًا لمدة 3 دقائق اليوم
+btn.disabled = false;
 btn.innerHTML = "🚀 أرسل المشاركة";
 
-// قفل الإرسال بعد 3 دقائق
+// مؤقت لمدة 3 دقائق
 setTimeout(function () {
+  // بعد 3 دقائق، أغلق الزر
   btn.disabled = true;
-  btn.innerHTML = "❌ تم إغلاق الإرسال";
+  btn.innerHTML = "❌ انتهت مدة المشاركة التجريبية";
 
   // منع الضغط نهائيًا
   btn.onclick = function () {
@@ -644,7 +646,10 @@ setTimeout(function () {
     );
     return false;
   };
-}, 3 * 60 * 1000);  
+
+  // بعد الإغلاق التجريبي، استدعاء initStatus لتطبيق أيام الفتح الحقيقية
+  setTimeout(initStatus, 100); // تأخير بسيط لتحديث الحالة
+}, 3 * 60 * 1000);
 </script>
 </body>
 </html>
