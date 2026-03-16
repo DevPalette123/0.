@@ -622,45 +622,34 @@ function showToast(msg, err=false){
 }
 
 // ── INIT ──
-let overrideOpen = true; // فتح تجريبي اليوم لمدة 3 دقائق
 initStatus();
 updateCd();
 setInterval(updateCd, 1000);
 loadWinner();
 
-var btn = document.getElementById("submitBtn");
+// أغلق الزر فورًا لكل الأيام
+const btn = document.getElementById("submitBtn");
+const veil = document.getElementById("closedVeil");
 
-function isOpen() {
-  if (overrideOpen) return true; // التجربة: فتح اليوم مؤقتًا
-  return OPEN_DAYS.includes(new Date().getDay());
-}
+// تعطيل الزر
+btn.disabled = true;
+btn.innerHTML = "❌ تم إغلاق الإرسال";
 
-// تحديث واجهة الزر مباشرة
-btn.disabled = false;
-document.getElementById('btnLabel').textContent = "🚀 أرسل المشاركة";
+// منع الضغط ويظهر الرسالة
+btn.onclick = function () {
+  showToast("انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية", true);
+  return false;
+};
 
-// بعد 3 دقائق
-setTimeout(function() {
-  overrideOpen = false; // العودة للعمل الطبيعي حسب OPEN_DAYS
-  initStatus();          // تحديث الواجهة حسب الأيام الأصلية
+// عرض النص أسفل الزر مباشرة
+veil.style.display = 'flex';
+veil.querySelector('p').textContent = "انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية";
 
-  // تحديث الزر حسب حالة اليوم الحقيقي
-  if(isOpen()) {
-    btn.disabled = false;
-    document.getElementById('btnLabel').textContent = "🚀 أرسل المشاركة";
-    btn.onclick = submitForm;
-  } else {
-    btn.disabled = true;
-    document.getElementById('btnLabel').textContent = "❌ انتهت مدة المشاركة";
-    btn.onclick = function() {
-      showToast(
-        "انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية",
-        true
-      );
-      return false;
-    };
-  }
-}, 3 * 60 * 1000); // 3 دقائق
+// تحديث شريط الحالة ليُظهر مغلق
+const bar  = document.getElementById('statusBar');
+bar.className = 'status-bar closed';
+document.getElementById('stTitle').textContent = '🔴 المشاركة مغلقة';
+document.getElementById('stSub').textContent = 'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
 </script>
 </body>
 </html>
