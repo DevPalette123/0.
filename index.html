@@ -642,22 +642,23 @@ function showToast(msg, err=false){
 }
 // ── INIT ──
 function initStatus(){
-  const bar  = document.getElementById('statusBar');
-  const title = document.getElementById('stTitle');
-  const sub   = document.getElementById('stSub');
-  const pills = document.getElementById('dayPills');
-  const veil  = document.getElementById('closedVeil');
-  const cdLabel = document.getElementById('cdLabel');
-  const cdVal   = document.getElementById('cdVal');
-  const day   = new Date().getDay();
+  const bar    = document.getElementById('statusBar');
+  const title  = document.getElementById('stTitle');
+  const sub    = document.getElementById('stSub');
+  const pills  = document.getElementById('dayPills');
+  const veil   = document.getElementById('closedVeil');
+  const cdLabelEl = document.getElementById('cdLabel');
+  const cdValEl   = document.getElementById('cdVal');
+  const btn    = document.getElementById('submitBtn');
+  const day    = new Date().getDay();
 
-  // كل الأيام مغلقة
+  // ── الحالة: كل الأيام مغلقة
   bar.className = 'status-bar closed';
   title.textContent = '🔴 المشاركة مغلقة';
   sub.textContent   = 'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
   veil.style.display = 'flex';
 
-  // عرض جميع الأيام كمغلقة
+  // ── عرض جميع الأيام كمغلقة
   pills.innerHTML = '';
   [0,1,2,3,4,5,6].forEach(d => {
     const el = document.createElement('div');
@@ -666,9 +667,9 @@ function initStatus(){
     pills.appendChild(el);
   });
 
-  // تعطيل الزر ومنع الضغط
-  const btn = document.getElementById('submitBtn');
+  // ── تعطيل زر الإرسال نهائيًا
   btn.disabled = true;
+  btn.innerHTML = "❌ تم إغلاق الإرسال";
   btn.onclick = function(){
     showToast(
       'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية',
@@ -677,9 +678,7 @@ function initStatus(){
     return false;
   };
 
-  // مكان العداد يظهر النص "انتهت"
-  const cdLabelEl = document.getElementById('cdLabel');
-  const cdValEl   = document.getElementById('cdVal');
+  // ── العداد يظهر النص "انتهت"
   cdLabelEl.textContent = '⏳ انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
   cdValEl.textContent   = '';
 }
