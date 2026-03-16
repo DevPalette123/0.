@@ -620,36 +620,52 @@ function showToast(msg, err=false){
   t.className = 'toast' + (err?' error':'') + ' show';
   setTimeout(()=>t.className='toast'+(err?' error':''), 3500);
 }
-
 // ── INIT ──
+function initStatus(){
+  const bar  = document.getElementById('statusBar');
+  const title = document.getElementById('stTitle');
+  const sub   = document.getElementById('stSub');
+  const pills = document.getElementById('dayPills');
+  const veil  = document.getElementById('closedVeil');
+  const cdLabel = document.getElementById('cdLabel');
+  const cdVal   = document.getElementById('cdVal');
+  const day   = new Date().getDay();
+
+  // كل الأيام مغلقة
+  bar.className = 'status-bar closed';
+  title.textContent = '🔴 المشاركة مغلقة';
+  sub.textContent   = 'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
+  veil.style.display = 'flex';
+
+  // عرض جميع الأيام كمغلقة
+  pills.innerHTML = '';
+  [0,1,2,3,4,5,6].forEach(d => {
+    const el = document.createElement('div');
+    el.className = `dp off ${d===day?'now':''}`;
+    el.textContent = DAYS[d];
+    pills.appendChild(el);
+  });
+
+  // تعطيل الزر ومنع الضغط
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.onclick = function(){
+    showToast(
+      'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية',
+      true
+    );
+    return false;
+  };
+
+  // مكان العداد يظهر النص "انتهت"
+  const cdLabelEl = document.getElementById('cdLabel');
+  const cdValEl   = document.getElementById('cdVal');
+  cdLabelEl.textContent = '⏳ انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
+  cdValEl.textContent   = '';
+}
+
+// تشغيل INIT مباشرة
 initStatus();
-updateCd();
-setInterval(updateCd, 1000);
-loadWinner();
-
-// أغلق الزر فورًا لكل الأيام
-const btn = document.getElementById("submitBtn");
-const veil = document.getElementById("closedVeil");
-
-// تعطيل الزر
-btn.disabled = true;
-btn.innerHTML = "❌ تم إغلاق الإرسال";
-
-// منع الضغط ويظهر الرسالة
-btn.onclick = function () {
-  showToast("انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية", true);
-  return false;
-};
-
-// عرض النص أسفل الزر مباشرة
-veil.style.display = 'flex';
-veil.querySelector('p').textContent = "انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية";
-
-// تحديث شريط الحالة ليُظهر مغلق
-const bar  = document.getElementById('statusBar');
-bar.className = 'status-bar closed';
-document.getElementById('stTitle').textContent = '🔴 المشاركة مغلقة';
-document.getElementById('stSub').textContent = 'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
 </script>
 </body>
 </html>
