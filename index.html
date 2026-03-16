@@ -626,26 +626,27 @@ initStatus();
 updateCd();
 setInterval(updateCd, 1000);
 loadWinner();
-   window.addEventListener("load", function () {
+ window.addEventListener("load", function () {
 
   var btn = document.getElementById("subBtn");
 
-  // فتح الإرسال
-  btn.disabled = false;
-  btn.innerHTML = "🚀 إرسال المشاركة";
-
-  // بعد 3 دقائق يتم الإغلاق
+  // قفل الإرسال بعد 3 دقائق
   setTimeout(function () {
 
     btn.disabled = true;
+
+    // منع الضغط نهائيًا
+    btn.onclick = function () {
+      showToast(
+        "انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية",
+        "er"
+      );
+      return false;
+    };
+
     btn.innerHTML = "❌ تم إغلاق الإرسال";
 
-    showToast(
-      "انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية",
-      "er"
-    );
-
-  }, 180000); // 3 دقائق
+  }, 180000);
 
 });
 </script>
