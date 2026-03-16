@@ -620,15 +620,19 @@ function showToast(msg, err=false){
   t.className = 'toast' + (err?' error':'') + ' show';
   setTimeout(()=>t.className='toast'+(err?' error':''), 3500);
 }
-
 // ── INIT ──
 initStatus();
 updateCd();
 setInterval(updateCd, 1000);
 loadWinner();
+
+// فتح الإرسال مؤقتًا لأي يوم للتجربة
+var btn = document.getElementById("submitBtn");
+btn.disabled = false; 
+btn.innerHTML = "🚀 أرسل المشاركة";
+
 // قفل الإرسال بعد 3 دقائق
 setTimeout(function () {
-  var btn = document.getElementById("submitBtn"); // صحح الـ id هنا
   btn.disabled = true;
   btn.innerHTML = "❌ تم إغلاق الإرسال";
 
@@ -640,7 +644,7 @@ setTimeout(function () {
     );
     return false;
   };
-}, 3 * 60 * 1000); // 3  دقائق
+}, 3 * 60 * 1000);  
 </script>
 </body>
 </html>
