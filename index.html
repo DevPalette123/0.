@@ -630,9 +630,8 @@ loadWinner();
 
 var btn = document.getElementById("submitBtn");
 
-// إعادة تعريف الدالة isOpen مؤقتًا
 function isOpen() {
-  if(overrideOpen) return true; // اليوم مفتوح مؤقتًا
+  if (overrideOpen) return true; // التجربة: فتح اليوم مؤقتًا
   return OPEN_DAYS.includes(new Date().getDay());
 }
 
