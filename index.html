@@ -320,28 +320,6 @@ function isOpen(){
   return false; // كل الأيام مغلقة
 }
 
-function initStatus(){
-  const bar  = document.getElementById('statusBar');
-  const title = document.getElementById('stTitle');
-  const sub   = document.getElementById('stSub');
-  const pills = document.getElementById('dayPills');
-  const veil  = document.getElementById('closedVeil');
-  const day   = new Date().getDay();
-
-  bar.className = 'status-bar closed';
-  title.textContent = '🔴 المشاركة مغلقة';
-  sub.textContent   = 'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
-  veil.style.display = 'flex';
-
-  pills.innerHTML = '';
-  [0,1,2,3,4,5,6].forEach(d => {
-    const el = document.createElement('div');
-    el.className = `dp off ${d===day?'now':''}`;
-    el.textContent = DAYS[d];
-    pills.appendChild(el);
-  });
-}
-
 // ── COUNTDOWN ──
 function updateCd(){
   const val = document.getElementById('cdVal');
@@ -440,23 +418,6 @@ function nextCloseDay(){
   }
 }
 
-// ── COUNTDOWN ──
-function updateCd(){
-  const open  = isOpen();
-  const label = document.getElementById('cdLabel');
-  const val   = document.getElementById('cdVal');
-  const now   = new Date();
-  const info  = open ? nextCloseDay() : nextOpenDay();
-  label.textContent = open ? '⏳ يُغلق بعد' : '⏳ يُفتح بعد';
-  const target = new Date(now);
-  target.setDate(target.getDate() + (info?.daysLeft||1));
-  target.setHours(0,0,0,0);
-  const diff = target - now;
-  const h = Math.floor(diff/3600000);
-  const m = Math.floor((diff%3600000)/60000);
-  const s = Math.floor((diff%60000)/1000);
-  val.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-}
 
 // ── TYPE TABS ──
 function setType(t){
@@ -632,7 +593,7 @@ function renderWinners(list){
         </div>`;
       }
     }
-[
+
     else if(w.type === 'فيديو' && w.link){
       const id = extractDriveId(w.link);
       if(id){
@@ -666,82 +627,7 @@ function renderWinners(list){
 
   el.innerHTML = html;
 }
-// ── HELPERS ──
-function extractDriveId(url){
-  const m = url.match(/[-\w]{25,}/);
-  return m ? m[0] : null;
-}
-function pickColor(name){
-  const cols = ['#6c63ff','#f5a623','#e91e8c','#00bcd4','#4caf50','#ff5722','#9c27b0'];
-  let h = 0;
-  for(let i=0;i<name.length;i++) h = name.charCodeAt(i) + ((h<<5)-h);
-  return cols[Math.abs(h) % cols.length];
-}
-function esc(t){
-  return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-function formatDate(d){
-  if(!d) return '';
-  try { return new Date(d).toLocaleDateString('ar-SA',{weekday:'short',day:'numeric',month:'short'}); }
-  catch { return d; }
-}
 
-// ── LIGHTBOX ──
-function openLightbox(src){ document.getElementById('lbImg').src=src; document.getElementById('lightbox').classList.add('show'); }
-function closeLightbox(){ document.getElementById('lightbox').classList.remove('show'); }
-
-// ── TOAST ──
-function showToast(msg, err=false){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast' + (err?' error':'') + ' show';
-  setTimeout(()=>t.className='toast'+(err?' error':''), 3500);
-}
-// ── INIT ──
-function initStatus(){
-  const bar    = document.getElementById('statusBar');
-  const title  = document.getElementById('stTitle');
-  const sub    = document.getElementById('stSub');
-  const pills  = document.getElementById('dayPills');
-  const veil   = document.getElementById('closedVeil');
-  const cdLabelEl = document.getElementById('cdLabel');
-  const cdValEl   = document.getElementById('cdVal');
-  const btn    = document.getElementById('submitBtn');
-  const day    = new Date().getDay();
-
-  // ── الحالة: كل الأيام مغلقة
-  bar.className = 'status-bar closed';
-  title.textContent = '🔴 المشاركة مغلقة';
-  sub.textContent   = 'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
-  veil.style.display = 'flex';
-
-  // ── عرض جميع الأيام كمغلقة
-  pills.innerHTML = '';
-  [0,1,2,3,4,5,6].forEach(d => {
-    const el = document.createElement('div');
-    el.className = `dp off ${d===day?'now':''}`;
-    el.textContent = DAYS[d];
-    pills.appendChild(el);
-  });
-
-  // ── تعطيل زر الإرسال نهائيًا
-  btn.disabled = true;
-  btn.innerHTML = "❌ تم إغلاق الإرسال";
-  btn.onclick = function(){
-    showToast(
-      'انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية',
-      true
-    );
-    return false;
-  };
-
-  // ── العداد يظهر النص "انتهت"
-  cdLabelEl.textContent = '⏳ انتهت مبادرة النصائح الرمضانية مع الأستاذة رحمة الخروصية';
-  cdValEl.textContent   = '';
-}
-
-// تشغيل INIT مباشرة
-initStatus();
 </script>
 </body>
 </html>
